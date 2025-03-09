@@ -16,8 +16,6 @@ dp = Dispatcher(storage=storage)
 
 dp.include_router(admin.router)
 
-user_languages = {}
-
 from datetime import datetime
 
 @dp.message(Command("start"))
