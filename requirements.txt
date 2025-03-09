@@ -2,4 +2,4 @@ aiogram
 flask
 tortoise-orm
 flask_cors
-
+requests
