@@ -1,0 +1,36 @@
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from main import TOKEN as BOT_TOKEN
+import json
+import requests
+
+app = Flask(__name__)
+CORS(app)
+
+JSON_FILE = "web3_products.json"
+TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/getFile?file_id="
+
+def load_products():
+    """ JSON fayldan mahsulotlarni yuklaydi. """
+    try:
+        with open(JSON_FILE, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            if not isinstance(data, dict) or "products" not in data:
+                raise ValueError("JSON noto‘g‘ri formatlangan! 'products' kaliti yo‘q!")
+            return data
+    except Exception as e:
+        print(f"❌ JSON yuklashda xatolik: {e}")  # Xatoni terminalga chiqaradi
+        return {"products": []}
+
+@app.route('/products', methods=['GET'])
+def get_products():
+    """ Barcha mahsulotlarni qaytaradi, rasm URL larini tekshiradi. """
+    data = load_products()
+
+    if not isinstance(data, dict) or "products" not in data:
+        return jsonify({"error": "Mahsulotlar ro‘yxati noto‘g‘ri!"}), 500
+
+    return jsonify(data)
+
+if __name__ == '__main__':
+    app.run(debug=True)

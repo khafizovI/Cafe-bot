@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mezely</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        header {
+            background-color: #222;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .cart-icon {
+            position: relative;
+            font-size: 22px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 7px;
+            font-size: 14px;
+        }
+        #menu {
+            text-align: center;
+            padding: 20px;
+        }
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 1 qatorga 2 ta mahsulot */
+            gap: 20px;
+            justify-content: center;
+            max-width: 95%;
+            margin: auto;
+        }
+        .item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .item img {
+            width: 100%;
+            height: auto; /* Rasm original formatda chiqishi uchun */
+            max-height: 180px; /* Juda katta bo‘lishining oldini olish */
+            object-fit: contain; /* Rasm proporsiyasini saqlash */
+            border-radius: 10px;
+        }
+        .price {
+            font-weight: bold;
+            color: #d32f2f;
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        .buy-button {
+            background-color: lightgrey;
+            color: black;
+            border: none;
+            padding: 7px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .buy-button:hover {
+            background-color: lightgrey;
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mezely</h1>
+        <nav>
+            <ul>
+                <li><a href="#menu">Menu</a></li>
+                <li>
+                    <a href="cart.html" class="cart-icon">
+                        🛒 <span id="cart-count" class="cart-badge">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <section id="menu">
+        <h2>Bizning menyu</h2>
+        <div class="menu-items" id="product-list"></div>
+    </section>
+    <footer>
+        <p>&copy; 2025 Mezely.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            const productList = document.getElementById("product-list");
+            updateCartCount();
+
+            try {
+                let response = await fetch("http://localhost:5000/products");
+                if (!response.ok) {
+                    throw new Error("Serverdan noto‘g‘ri javob keldi");
+                }
+                let data = await response.json();
+
+                if (!data.products || data.products.length === 0) {
+                    productList.innerHTML = "<p>Mahsulotlar topilmadi.</p>";
+                    return;
+                }
+
+                data.products.forEach(product => {
+                    let item = document.createElement("div");
+                    item.className = "item";
+                    item.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <span class="price">${product.price} сум</span>
+                        <button class="buy-button" onclick="addToCart('${product.name}', '${product.price}', '${product.image}')">Sotib olish</button>
+                    `;
+                    productList.appendChild(item);
+                });
+            } catch (error) {
+                console.error("Xatolik yuklashda: ", error);
+                productList.innerHTML = "<p>Xatolik yuz berdi! Mahsulotlar yuklanmadi.</p>";
+            }
+        });
+
+        function addToCart(name, price, image) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.push({ name, price, image });
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            alert(`${name} savatchaga qo'shildi!`);
+        }
+
+        function updateCartCount() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            document.getElementById("cart-count").textContent = cart.length;
+        }
+    </script>
+</body>
+</html>

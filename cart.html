@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savatcha</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        header {
+            background-color: #222;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        #cart {
+            text-align: center;
+            padding: 20px;
+        }
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .cart-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 80%;
+            max-width: 300px;
+            flex-direction: column;
+        }
+        .cart-item img {
+            width: 80px;
+            border-radius: 10px;
+        }
+        .cart-item h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .cart-item .price {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .remove-button, .add-button {
+            background-color: white;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .add-button {
+            background-color: white;
+        }
+        .pay-button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 200px;
+        }
+        .location-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        #time-restriction {
+            display: none;
+            text-align: center;
+            color: red;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Savatcha</h1>
+    </header>
+
+    <div id="time-restriction">
+        <p>Bizning ish vaqti tugagan. Iltimos, 9:00 dan 23:00 gacha kiring.</p>
+    </div>
+
+    <section id="cart">
+        <h2>Sizning mahsulotlaringiz</h2>
+        <div class="cart-items" id="cart-items"></div>
+        <button class="pay-button" onclick="checkout()">To‘lov qilish</button>
+        <br>
+        <button class="location-button" onclick="selectLocation()">📍 Joyni tanlash</button>
+        <p id="user-location">Joylashuv tanlanmagan</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Mezely.</p>
+    </footer>
+
+    <script>
+        function isWorkingHours() {
+            const now = new Date();
+            const hour = now.getHours();
+            return hour >= 10 && hour < 23;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!isWorkingHours()) {
+                document.getElementById("time-restriction").style.display = "block";
+                document.getElementById("cart").style.display = "none";
+                return;
+            }
+            loadCart();
+            loadUserLocation();
+        });
+
+        function loadCart() {
+            let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartContainer = document.getElementById("cart-items");
+            cartContainer.innerHTML = "";
+
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = "<p>Savatcha bo‘sh</p>";
+                return;
+            }
+
+            cartItems.forEach((item, index) => {
+                let cartItem = document.createElement("div");
+                cartItem.className = "cart-item";
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div>
+                        <h3>${item.name}</h3>
+                        <p class="price">${item.price} сум</p>
+                    </div>
+                    <button class="remove-button" onclick="removeFromCart(${index})">➖</button>
+                    <button class="add-button" onclick="addToCart('${item.name}', '${item.price}', '${item.image}')">➕</button>
+                `;
+                cartContainer.appendChild(cartItem);
+            });
+        }
+
+        function removeFromCart(index) {
+            let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            cartItems.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cartItems));
+            loadCart();
+        }
+
+        function addToCart(name, price, image) {
+            let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            cartItems.push({ name, price, image });
+            localStorage.setItem("cart", JSON.stringify(cartItems));
+            loadCart();
+        }
+
+        function checkout() {
+            alert("To‘lov sahifasiga o'tmoqdasiz...");
+        }
+
+        function selectLocation() {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    const locationText = `Sizning joylashuvingiz: ${latitude}, ${longitude}`;
+                    localStorage.setItem("userLocation", locationText);
+                    document.getElementById("user-location").innerText = locationText;
+                },
+                function() {
+                    alert("Joylashuvni aniqlash imkonsiz!");
+                }
+            );
+        }
+
+        function loadUserLocation() {
+            const savedLocation = localStorage.getItem("userLocation");
+            if (savedLocation) {
+                document.getElementById("user-location").innerText = savedLocation;
+            }
+        }
+    </script>
+</body>
+</html>

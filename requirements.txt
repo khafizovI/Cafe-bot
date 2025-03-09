@@ -1,0 +1,4 @@
+pip install aiogram
+pip install flask
+pip install tortoise-orm
+pip install WebAppInfo

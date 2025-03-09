@@ -1,0 +1,52 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "image": "AgACAgIAAxkBAAIBZWfJ95c3okNta8Pd2ji8AkvljrFqAAKt7jEbbeBQShLT0QzwsMRHAQADAgADeQADNgQ",
+            "name": "Product1",
+            "price": 150000
+        },
+        {
+            "id": 2,
+            "image": "AgACAgIAAxkBAAIBZWfJ95c3okNta8Pd2ji8AkvljrFqAAKt7jEbbeBQShLT0QzwsMRHAQADAgADeQADNgQ",
+            "name": "Product2",
+            "price": 20000
+        },
+        {
+            "id": 3,
+            "image": "AgACAgIAAxkBAAIBZWfJ95c3okNta8Pd2ji8AkvljrFqAAKt7jEbbeBQShLT0QzwsMRHAQADAgADeQADNgQ",
+            "name": "Product3",
+            "price": 500000
+        },
+        {
+            "id": 4,
+            "image": "AgACAgIAAxkBAAIBZWfJ95c3okNta8Pd2ji8AkvljrFqAAKt7jEbbeBQShLT0QzwsMRHAQADAgADeQADNgQ",
+            "name": "Product 4",
+            "price": 600000
+        },
+        {
+            "id": 5,
+            "image": "AgACAgIAAxkBAAIBZWfJ95c3okNta8Pd2ji8AkvljrFqAAKt7jEbbeBQShLT0QzwsMRHAQADAgADeQADNgQ",
+            "name": "Product 5",
+            "price": 100000
+        },
+        {
+            "id": 6,
+            "image": "AgACAgIAAxkBAAIBZWfJ95c3okNta8Pd2ji8AkvljrFqAAKt7jEbbeBQShLT0QzwsMRHAQADAgADeQADNgQ",
+            "name": "Product6",
+            "price": 400000
+        },
+        {
+            "id": 7,
+            "image": "AgACAgIAAxkBAAIBZWfJ95c3okNta8Pd2ji8AkvljrFqAAKt7jEbbeBQShLT0QzwsMRHAQADAgADeQADNgQ",
+            "name": "Product 7",
+            "price": 600000
+        },
+        {
+            "id": 8,
+            "image": "AgACAgIAAxkBAAIB9mfKjqJvD-zZQLPeXk8Tijfp7K8VAAJ58zEbN5BQSg2_e63l6Qc4AQADAgADeAADNgQ",
+            "name": "isim",
+            "price": 20
+        }
+    ]
+}
